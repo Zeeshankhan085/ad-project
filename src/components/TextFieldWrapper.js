@@ -1,0 +1,22 @@
+import React from 'react';
+import { useField } from 'formik';
+import { TextField } from '@mui/material';
+
+function TextFieldWrapper({ name, ...otherProps }) {
+  const [field, meta] = useField(name);
+  const configTextField = {
+    ...field,
+    ...otherProps,
+    fullWidth: true,
+    variant: 'standard',
+    margin: 'normal',
+  };
+
+  if (meta && meta.touched && meta.error) {
+    configTextField.error = true;
+    configTextField.helperText = meta.error;
+  }
+  return <TextField {...configTextField}>TextField</TextField>;
+}
+
+export default TextFieldWrapper;
