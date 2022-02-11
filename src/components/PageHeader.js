@@ -228,7 +228,11 @@ function PageHeader() {
                   <Button
                     onClick={() => {
                       setFilterOpened(false);
-                      applyFilter({ status, platform, type });
+                      applyFilter({
+                        status: status || 'live',
+                        platform: platform || 'google',
+                        type: type || 'image',
+                      });
                     }}
                     sx={{ whiteSpace: 'nowrap' }}
                     size='small'

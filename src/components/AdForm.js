@@ -70,7 +70,6 @@ function EditForm() {
   };
 
   const onSubmit = (values) => {
-    console.log(values);
     setIsSubmitting(true);
 
     if (id) {
@@ -86,7 +85,6 @@ function EditForm() {
     return [google, facebook, linkedin];
   };
   const createAd = (data) => {
-    console.log(data);
     const createdAt = new Date();
     instance
       .post('/ads', {
@@ -119,7 +117,6 @@ function EditForm() {
   const updateAd = (data) => {
     const updatedAt = new Date();
 
-    console.log(id, data);
     instance
       .put(`/ads/${id}`, {
         ...data,
@@ -167,7 +164,6 @@ function EditForm() {
           enableReinitialize
         >
           {({ values, setFieldValue }) => {
-            console.log(values);
             return (
               <Form>
                 <TextFieldWrapper name='name' label='Name' />
