@@ -229,9 +229,9 @@ function PageHeader() {
                     onClick={() => {
                       setFilterOpened(false);
                       applyFilter({
-                        status: status || 'live',
-                        platform: platform || 'google',
-                        type: type || 'image',
+                        status,
+                        platform,
+                        type,
                       });
                     }}
                     sx={{ whiteSpace: 'nowrap' }}

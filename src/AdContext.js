@@ -98,13 +98,22 @@ export const AdProvider = ({ children }) => {
     );
   };
   const applyFilter = ({ type, status, platform }) => {
-    setFilteredAds(
-      ads.filter((ad) => {
-        return (
-          ad.type === type || ad.status === status || ad.platform === platform
-        );
-      })
-    );
+    let filteredData = ads;
+    if (type) {
+      filteredData = ads.filter((ad) => ad.type === type);
+      console.log(filteredData, '1');
+    }
+    if (status) {
+      filteredData = filteredData.filter((ad) => ad.status === status);
+      console.log(filteredData, '2');
+    }
+
+    if (platform) {
+      filteredData = filteredData.filter((ad) => ad.social.includes(platform));
+      console.log(filteredData, '3');
+    }
+
+    setFilteredAds(filteredData);
   };
   useEffect(() => {
     if (!localStorage.getItem('ads')) {
