@@ -118,17 +118,17 @@ function AdCard({ ad }) {
               icon={
                 <FiberManualRecordIcon
                   fontSize='small'
-                  style={{ color: red[600] }}
+                  style={{ color: red[700] }}
                 />
               }
               sx={{
                 marginLeft: 'auto',
                 paddingLeft: '.25rem',
                 paddingRight: '.25rem',
-                background: '#cdffcd',
+                background: '#f4c2c2',
                 fontWeight: 'bold',
                 fontSize: '12px',
-                color: red[600],
+                color: red[700],
               }}
               label='Paused'
             />
