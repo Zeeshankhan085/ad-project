@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, Grid, Link } from '@mui/material';
 import { useParams, Link as RouterLink } from 'react-router-dom';
-import instance from '../axios';
+import { getData } from '../StorageService';
 
 function AdDetails() {
   const { id } = useParams();
   const [ad, setAd] = useState(null);
   useEffect(() => {
-    instance.get(`/ads/${id}`).then((res) => setAd(res.data));
+    const result = getData(id);
+    setAd(result);
   }, [id]);
 
   if (ad) {
@@ -31,7 +32,13 @@ function AdDetails() {
                     }`}
                   ></iframe>
                 ) : (
-                  <img src={ad.contentUrl} alt='' />
+                  <img
+                    height='200'
+                    width='250'
+                    style={{ display: 'block', objectFit: 'cover' }}
+                    src={ad.contentUrl}
+                    alt=''
+                  />
                 )}
               </Grid>
               <Grid sx={{ alignSelf: 'center' }} item xs={9} sm={4} md={3}>

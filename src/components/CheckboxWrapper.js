@@ -36,6 +36,7 @@ function CheckBoxWrapper({ name, label, ...otherProps }) {
       <FormLabel></FormLabel>
       <FormGroup>
         <FormControlLabel
+          checked={field.value}
           label={label}
           control={<Checkbox {...configCheckbox} />}
         ></FormControlLabel>

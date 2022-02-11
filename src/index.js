@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Ads from './routes/ads';
 import AdDetails from './components/AdDetails';
 import AdPage from './components/AdPage';
@@ -13,11 +13,8 @@ import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter basename='/'>
       <Routes>
-        {/* <Route exact path='/'>
-          <Redirect to='/ads' />
-        </Route> */}
         <Route path='/' element={<Navigate to='/ads' replace />} />
         <Route path='/ads/' element={<Ads />}>
           <Route path='' element={<AdPage />} />
@@ -26,7 +23,7 @@ ReactDOM.render(
           <Route path='new' element={<AdNew />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

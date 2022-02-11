@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
+import { updateData, storeData, getData } from '../StorageService';
 
 import {
   Grid,
+  Box,
   Typography,
   CardHeader,
   FormControl,
@@ -14,7 +16,6 @@ import {
   Card,
   CardContent,
 } from '@mui/material';
-import instance from '../axios';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -38,23 +39,21 @@ const schema = yup.object().shape({
 
 function EditForm() {
   const { id } = useParams();
+  const title = id ? 'Update Ad' : 'Create Ad';
   const navigate = useNavigate();
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formValues, setFormValues] = useState(null);
 
   useEffect(() => {
     if (id) {
-      instance.get(`/ads/${id}`).then((res) => {
-        const { data } = res;
-
-        const social = {};
-        social.google = data.social.includes('google') ? true : false;
-        social.linkedin = data.social.includes('linkedin') ? true : false;
-        social.facebook = data.social.includes('facebook') ? true : false;
-        data.social = social;
-        setFormValues(data);
-      });
+      const data = getData(id);
+      const social = {};
+      social.google = data.social.includes('google') ? true : false;
+      social.linkedin = data.social.includes('linkedin') ? true : false;
+      social.facebook = data.social.includes('facebook') ? true : false;
+      data.social = social;
+      setFormValues(data);
+      console.log('----------data--------', data);
     }
   }, [id]);
 
@@ -70,8 +69,6 @@ function EditForm() {
   };
 
   const onSubmit = (values) => {
-    setIsSubmitting(true);
-
     if (id) {
       updateAd(values);
       return;
@@ -81,67 +78,43 @@ function EditForm() {
   const constructSocial = (social) => {
     const google = social.google ? 'google' : null;
     const facebook = social.facebook ? 'facebook' : null;
-    const linkedin = social.linkedin ? 'google' : null;
+    const linkedin = social.linkedin ? 'linkedin' : null;
     return [google, facebook, linkedin];
   };
   const createAd = (data) => {
     const createdAt = new Date();
-    instance
-      .post('/ads', {
-        ...data,
-        createdAt,
-        updatedAt: null,
-        social: constructSocial(data.social),
-      })
-      .then(() => {
-        Swal.fire({
-          title: 'Ad Created',
-          timer: 1500,
-          icon: 'success',
-        });
-        setTimeout(() => navigate('/'), 2000);
-      })
-      .catch(() => {
-        Swal.fire({
-          title: 'Error Occured',
-          timer: 1500,
-          icon: 'error',
-        });
-        setTimeout(() => navigate('/'), 2000);
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
+    const payload = {
+      ...data,
+      createdAt,
+      updatedAt: null,
+      social: constructSocial(data.social),
+    };
+    storeData(payload);
+    Swal.fire({
+      title: 'Ad Created',
+      timer: 1500,
+      icon: 'success',
+      confirmButtonColor: '#36a3e5',
+    });
+    setTimeout(() => navigate('/'), 2000);
   };
 
   const updateAd = (data) => {
     const updatedAt = new Date();
+    const payload = {
+      ...data,
+      updatedAt,
+      social: constructSocial(data.social),
+    };
 
-    instance
-      .put(`/ads/${id}`, {
-        ...data,
-        updatedAt,
-        social: constructSocial(data.social),
-      })
-      .then(() => {
-        Swal.fire({
-          title: 'Ad Updated',
-          timer: 1500,
-          icon: 'success',
-        });
-        setTimeout(() => navigate('/'), 2000);
-      })
-      .catch(() => {
-        Swal.fire({
-          title: 'Error Occured',
-          timer: 1500,
-          icon: 'error',
-        });
-        setTimeout(() => navigate('/'), 2000);
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
+    updateData(id, payload);
+    Swal.fire({
+      title: 'Ad Updated',
+      timer: 1500,
+      icon: 'success',
+      confirmButtonColor: '#36a3e5',
+    });
+    setTimeout(() => navigate('/'), 2000);
   };
 
   return (
@@ -154,7 +127,7 @@ function EditForm() {
             textAlign: 'center',
           },
         }}
-        title='Create Ad'
+        title={title}
       ></CardHeader>
       <CardContent>
         <Formik
@@ -266,14 +239,23 @@ function EditForm() {
                     <CheckBoxWrapper name='social.facebook' label='Facebook' />
                   </Grid>
                 </Grid>
-                <Button
-                  disabled={isSubmitting}
-                  color='primary'
-                  variant='contained'
-                  type='submit'
-                >
-                  Submit
-                </Button>
+                <Box sx={{ marginTop: '28px' }} textAlign='center'>
+                  {id && (
+                    <Button
+                      disabled={initialValues === values}
+                      color='primary'
+                      variant='contained'
+                      type='submit'
+                    >
+                      Update Ad
+                    </Button>
+                  )}
+                  {!id && (
+                    <Button color='primary' variant='contained' type='submit'>
+                      Create Ad
+                    </Button>
+                  )}
+                </Box>
               </Form>
             );
           }}

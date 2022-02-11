@@ -1,10 +1,79 @@
 import React, { useState, useEffect, createContext } from 'react';
-import instance from './axios';
+
+let initialData = [
+  {
+    id: 1,
+    name: 'Double D',
+    createdAt: 'Wed Feb 09 2022 19:17:57 GMT+0530 (India Standard Time)',
+    updatedAt: '2022-02-10T15:34:24.112Z',
+    type: 'image',
+    headline: 'Huge Double Door Fridge',
+    description: 'Maximum storage capacity with our counter depth fridge',
+    status: 'draft',
+    social: ['google', 'facebook', null],
+    contentUrl: 'https://placekitten.com/g/200/300',
+    destinationUrl: 'https://placekitten.com/g/200/300',
+  },
+  {
+    id: 2,
+    name: 'Double Door Fridg',
+    createdAt: 'Wed Feb 09 2022 19:17:57 GMT+0530 (India Standard Time)',
+    updatedAt: '2022-02-10T14:03:11.518Z',
+    type: 'image',
+    headline: 'Huge Double Door Fridge',
+    description: 'Maximum storage capacity with our counter depth fridge',
+    status: 'live',
+    social: ['google', 'facebook', 'google'],
+    contentUrl: 'https://placekitten.com/g/200/300',
+    destinationUrl: 'https://placekitten.com/g/200/300',
+  },
+  {
+    id: 3,
+    name: 'Double Door Fridge',
+    createdAt: 'Wed Feb 09 2022 19:17:57 GMT+0530 (India Standard Time)',
+    updatedAt: '2022-02-10T11:55:25.386Z',
+    type: 'image',
+    headline: 'Huge Double Door Fridge',
+    description: 'capacity with our counter depth fridge',
+    status: 'live',
+    social: [null, null, null],
+    contentUrl: 'https://placekitten.com/g/200/300',
+    destinationUrl: 'https://placekitten.com/g/200/300',
+  },
+  {
+    id: 4,
+    name: 'Double Door Fridge',
+    createdAt: 'Wed Feb 09 2022 19:17:57 GMT+0530 (India Standard Time)',
+    updatedAt: 'Wed Feb 06 2022 19:17:57 GMT+0530 (India Standard Time)',
+    type: 'image',
+    headline: 'Huge Double Door Fridge',
+    description: 'Maximum storage capacity with our counter depth fridge',
+    status: 'paused',
+    social: ['google', 'linkedin', 'facebook'],
+    contentUrl: 'https://placekitten.com/g/200/300',
+    destinationUrl: 'https://placekitten.com/g/200/300',
+  },
+  {
+    id: 5,
+    name: 'Double Door Fridge',
+    createdAt: 'Wed Feb 09 2022 19:17:57 GMT+0530 (India Standard Time)',
+    updatedAt: 'Wed Feb 05 2022 19:17:57 GMT+0530 (India Standard Time)',
+    type: 'image',
+    headline: 'Huge Double Door Fridge',
+    description: 'Maximum storage capacity with our counter depth fridge',
+    status: 'paused',
+    social: ['google', 'linkedin', 'facebook'],
+    contentUrl: 'https://placekitten.com/g/200/300',
+    destinationUrl: 'https://placekitten.com/g/200/300',
+  },
+];
 
 export const AdContext = createContext();
 
 export const AdProvider = ({ children }) => {
+  const [ads, setAds] = useState([]);
   const [filteredAds, setFilteredAds] = useState([]);
+
   const handleInput = (text) => {
     text = text.toLowerCase();
     setFilteredAds(
@@ -37,12 +106,12 @@ export const AdProvider = ({ children }) => {
       })
     );
   };
-  const [ads, setAds] = useState([]);
   useEffect(() => {
-    instance.get('/ads').then((res) => {
-      setAds(res.data);
-      setFilteredAds(res.data);
-    });
+    if (!localStorage.getItem('ads')) {
+      localStorage.setItem('ads', JSON.stringify(initialData));
+    }
+    setAds(JSON.parse(localStorage.getItem('ads')));
+    setFilteredAds(JSON.parse(localStorage.getItem('ads')));
   }, []);
   return (
     <AdContext.Provider
