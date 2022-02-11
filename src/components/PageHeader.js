@@ -7,6 +7,7 @@ import {
   ListItem,
   FormControl,
   FormLabel,
+  IconButton,
   RadioGroup,
   Grid,
   FormControlLabel,
@@ -18,12 +19,14 @@ import {
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import SortIcon from '@mui/icons-material/Sort';
+import ClearIcon from '@mui/icons-material/Clear';
 import { AdContext } from '../AdContext';
 
 // import TextField from '@mui/material/TextField';
 // import InputAdornment from '@mui/material/InputAdornment';
 
 function PageHeader() {
+  const [inputText, setInputText] = useState('');
   const [filterOpened, setFilterOpened] = useState(false);
   const [sortOpened, setSortOpened] = useState(false);
   const [sortType, setSortType] = useState('');
@@ -31,6 +34,7 @@ function PageHeader() {
   const [platform, setPlatform] = useState('');
   const [type, setType] = useState('');
   const { applyFilter } = useContext(AdContext);
+  const { clearFilter } = useContext(AdContext);
   const { handleInput } = useContext(AdContext);
   const { sortAds } = useContext(AdContext);
 
@@ -40,12 +44,21 @@ function PageHeader() {
         <Grid item xs={12} sm={7}>
           <TextField
             sx={{ marginBottom: '1rem', width: '60%' }}
-            onInput={(e) => handleInput(e.target.value)}
+            onInput={(e) => {
+              setInputText(e.target.value);
+              handleInput(e.target.value);
+            }}
+            value={inputText}
             variant='outlined'
             placeholder='Search for an ad'
             InputProps={{
               startAdornment: (
                 <SearchIcon color='primary' sx={{ paddingRight: '1rem' }} />
+              ),
+              endAdornment: (
+                <IconButton size='small' onClick={() => setInputText('')}>
+                  <ClearIcon />
+                </IconButton>
               ),
             }}
           />
@@ -238,6 +251,21 @@ function PageHeader() {
                     size='small'
                   >
                     Apply filter
+                  </Button>
+                  <Button
+                    color='error'
+                    onClick={() => {
+                      setFilterOpened(false);
+                      clearFilter({
+                        status,
+                        platform,
+                        type,
+                      });
+                    }}
+                    sx={{ whiteSpace: 'nowrap' }}
+                    size='small'
+                  >
+                    Clear filter
                   </Button>
                 </CardActions>
               </Card>

@@ -97,6 +97,11 @@ export const AdProvider = ({ children }) => {
       filtered.map((ad) => ({ ...ad, updatedAt: ad.updatedAt.toString() }))
     );
   };
+
+  const clearFilter = () => {
+    setFilteredAds(ads);
+  };
+
   const applyFilter = ({ type, status, platform }) => {
     let filteredData = ads;
     if (type) {
@@ -124,7 +129,13 @@ export const AdProvider = ({ children }) => {
   }, []);
   return (
     <AdContext.Provider
-      value={{ ads: filteredAds, applyFilter, sortAds, handleInput }}
+      value={{
+        ads: filteredAds,
+        applyFilter,
+        sortAds,
+        handleInput,
+        clearFilter,
+      }}
     >
       {children}
     </AdContext.Provider>
