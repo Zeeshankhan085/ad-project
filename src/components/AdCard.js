@@ -33,11 +33,11 @@ function AdCard({ ad }) {
             },
           }}
           title={ad.name}
-          action={
-            <IconButton aria-label='settings'>
-              <MoreVertIcon />
-            </IconButton>
-          }
+          // action={
+          //   <IconButton onClick={(event) => {event.stopImmediatePropagation(); console.log(event)}} aria-label='settings'>
+          //     <MoreVertIcon />
+          //   </IconButton>
+          // }
         ></CardHeader>
         {ad.type === 'video' ? (
           <CardMedia
